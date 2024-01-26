@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState } from "react";
+import words from '../assets/lang'
 const list = [
   {
     id: 1,
@@ -19,14 +20,17 @@ const list = [
     date: "07.03.2022",
   },
 ];
-export const NotesContext = createContext({
-  notes: [],
-  modal: false,
-  edit: false,
-  editNote: {},
-  search: '',
-  currentId: 1
-});
+// export const NotesContext = createContext({
+//   notes: [],
+//   modal: false,
+//   edit: false,
+//   editNote: {},
+//   search: '',
+//   currentId: 1,
+//   lang: 'ru',
+//   words
+// });
+export const NotesContext = createContext();
 
 const NotesProvider = ({ children }) => {
   const [notes, setNotes] = useState(list);
@@ -34,6 +38,7 @@ const NotesProvider = ({ children }) => {
   const [noteInfo, setNoteInfo] = useState(null);
   const [search, setSearch] = useState('');
   const [currentId, setCurrentId] = useState(0);
+  const [lang, setLang] = useState('ru');
   
   useEffect(() => {
     let localNotes = localStorage.getItem('notes');
@@ -99,7 +104,10 @@ const NotesProvider = ({ children }) => {
         setSearch,
         closeModal,
         currentId,
-        setCurrentId
+        setCurrentId,
+        lang,
+        setLang,
+        words
       }}
     >
       {children}

@@ -1,8 +1,7 @@
-/* eslint-disable react/prop-types */
 import useNotes from "../../hooks/useNotes";
 
 function NoteItem({ grid, note }) {
-  const { delNote, editNote } = useNotes();
+  const { delNote, editNote, lang, words } = useNotes();
   return (
     <div className="card">
       <div className={grid ? "" : "card__content"}>
@@ -13,13 +12,13 @@ function NoteItem({ grid, note }) {
       <div className="card__controls">
         <button className="card__btn" onClick={() => editNote(note.id)}>
           <img src="@/assets/img/edit.svg" alt="" />
-          {/* <span>{ words.editbtn[lang] }</span> */}
-          <span>Редактировать</span>
+          <span>{ words.editbtn[lang] }</span>
+          {/* <span>Редактировать</span> */}
         </button>
         <button className="card__btn card__btn_red" onClick={() => delNote(note.id)}>
           <img src="@/assets/img/delete.svg" alt="" />
-          {/* <span>{ words.deledit[lang] }</span> */}
-          <span>Удалить</span>
+          <span>{ words.deledit[lang] }</span>
+          {/* <span>Удалить</span> */}
         </button>
       </div>
     </div>

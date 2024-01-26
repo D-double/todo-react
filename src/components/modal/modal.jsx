@@ -1,11 +1,10 @@
-/* eslint-disable react/prop-types */
 import './modal.css'
 import useNotes from '../../hooks/useNotes';
 import { Transition } from '../ui';
 import { useEffect, useState } from 'react';
 
 function Modal() {
-  const {setModal, noteInfo, modal, changeNote, addNote, closeModal, currentId} = useNotes();
+  const {setModal, noteInfo, modal, changeNote, addNote, closeModal, currentId, lang, words} = useNotes();
   const [input, setInput] = useState('');
   const [textarea, setTextarea] = useState('');
   useEffect(()=>{
@@ -51,8 +50,8 @@ function Modal() {
   return ( 
     <Transition showClass={'modal'} hide={!modal} onClick={()=>setModal(false)}>
       <div className="modal__form" onClick={(e)=>e.stopPropagation()}>
-        {/* <h3 className="modal__title">{ edit ? words.titlewindowedit[lang] : words.titlewindow[lang] }</h3> */}
-        <h3 className="modal__title">{ noteInfo ? 'Изменить заметку' : 'Добавить заметку' }</h3>
+        <h3 className="modal__title">{ noteInfo ? words.titlewindowedit[lang] : words.titlewindow[lang] }</h3>
+        {/* <h3 className="modal__title">{ noteInfo ? 'Изменить заметку' : 'Добавить заметку' }</h3> */}
         <div className="modal__content">
           <label>
             <span>Title</span>
@@ -64,11 +63,12 @@ function Modal() {
           </label>
         </div>
         <div className="modal__controls">
-          {/* <button className="modal__btn modal__btn_red" onClick={closeModal}>{ words.closebtn[lang] }</button> */}
-          <button className="modal__btn modal__btn_red" onClick={closeModal}>Отмена</button>
-          {/* <button className="modal__btn" onClick={changeNote}>{ words.editwindowbtn[lang] }</button> */}
-          {noteInfo ? <button className="modal__btn" onClick={changeHandle}>Изменить</button> :
-          <button className="modal__btn" onClick={addHandle}>Добавить</button>}
+          <button className="modal__btn modal__btn_red" onClick={closeModal}>{ words.closebtn[lang] }</button>
+          {/* <button className="modal__btn modal__btn_red" onClick={closeModal}>Отмена</button> */}
+          {noteInfo ? <button className="modal__btn" onClick={changeHandle}>{ words.editwindowbtn[lang] }</button> :
+          <button className="modal__btn" onClick={addHandle}>{ words.addbtn[lang] }</button>}
+          {/* {noteInfo ? <button className="modal__btn" onClick={changeHandle}>Изменить</button> :
+          <button className="modal__btn" onClick={addHandle}>Добавить</button>} */}
         </div>
       </div>
     </Transition>
