@@ -20,6 +20,14 @@
   justify-content: center;
   align-items: center;
   z-index: 99;
+  transition: 0.5s;
+}
+
+.modal_hide {
+  opacity: 0;
+  transform: scale(1.5);
+  /* z-index: -1; */
+  /* transition: z-index 0.5s 0.5s; */
 }
 
 .modal__form {

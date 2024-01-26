@@ -1,30 +1,56 @@
 import './navbar.css'
+import { Transition } from '../ui'
+import { useEffect, useRef, useState } from 'react';
+import { searchImg, backImg, clearImg } from '../../assets/images';
+import useNotes from '../../hooks/useNotes';
 
-const Navbar = ()=>{
+
+const Navbar = ({lang, setLang})=>{
+  const [hide, setHide] = useState(true);
+  const { search, setSearch } = useNotes();
+  const handleHide = ()=>{
+    setHide(!hide);
+    if(!hide){
+      setSearch('')
+    }
+  }
+  const handleSearch = (e)=>{
+    setSearch(e.target.value)
+  }
+  const inputSearch = useRef(null);
+  useEffect(()=>{
+    if (!hide && inputSearch) {
+      inputSearch.current.focus();      
+    }
+  }, [hide])
+  
   return (
     <header className="header">
-    {/* <Transition nameN="header"> */}
-      <div className="header__content">
-        <button className="header__lang">UZ</button>
-        <button className="header__lang">RU</button>
+    <Transition showClass="header__content" hide={!hide}>
+      <>
+        { 
+          lang == 'ru' ? 
+          <button className="header__lang" onClick={()=>setLang('uz')}>UZ</button> :
+          <button className="header__lang" onClick={()=>setLang('ru')}>RU</button>
+        }
         {/* <h1 className="header__title">{words.appbartitle[lang]}</h1> */}
         <h1 className="header__title">заметки</h1>
-        <button className="header__search">
-          <img src="@/assets/img/search.svg" alt=""/>
+        <button className="header__search" onClick={handleHide}>
+          <img src={searchImg} alt=""/>
         </button>
-      </div>
-    {/* </Transition> */}
-    {/* <Transition name="header"> */}
-      <div className="header__form">
-        <button className="header__back">
-          <img src="@/assets/img/back.svg" alt=""/>
+      </>
+    </Transition>
+    <Transition showClass="header__form" hide={hide}>
+      <>
+        <button className="header__back" onClick={handleHide}>
+          <img src={backImg} alt=""/>
         </button>
-        <input type="text" className="header__input container" placeholder="Поиск..."/>
-        <button className="header__close">
-          <img src="@/assets/img/close.svg" alt=""/>
+        <input ref={inputSearch} type="text" value={search} className="header__input container" placeholder="Поиск..." onChange={handleSearch}/>
+        <button className="header__close" onClick={()=>{inputSearch.current.focus(); setSearch('')}}>
+          <img src={clearImg} alt=""/>
         </button>
-      </div>
-    {/* </Transition> */}
+      </>
+    </Transition>
   </header>
   )
 }

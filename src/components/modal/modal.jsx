@@ -1,30 +1,77 @@
 /* eslint-disable react/prop-types */
 import './modal.css'
-function Modal({edit, setModal, changeNote, addNote}) {
+import useNotes from '../../hooks/useNotes';
+import { Transition } from '../ui';
+import { useEffect, useState } from 'react';
+
+function Modal() {
+  const {setModal, noteInfo, modal, changeNote, addNote, closeModal, currentId} = useNotes();
+  const [input, setInput] = useState('');
+  const [textarea, setTextarea] = useState('');
+  useEffect(()=>{
+    if (noteInfo) {
+      setInput(noteInfo.title);
+      setTextarea(noteInfo.desc)
+    } else {
+      setInput('');
+      setTextarea('')
+    }
+  }, [modal])
+
+  const addHandle = ()=>{
+    let title = input.trim();
+    let desc = textarea.trim()
+    if (title.length > 0 && desc.length > 0) {
+      let item = {
+        id: currentId + 1,
+        title,
+        desc,
+        date: new Date().toLocaleDateString()
+      }
+      addNote(item)
+      setModal(false)
+    }
+  }
+
+  const changeHandle = ()=>{
+    let title = input.trim();
+    let desc = textarea.trim()
+    if (title.length > 0 && desc.length > 0) {
+      let item = {
+        id: noteInfo.id,
+        title,
+        desc,
+        date: new Date().toLocaleDateString()
+      }
+      changeNote(item)
+      setModal(false)
+    }
+  }
+
   return ( 
-    <div className="modal" onClick={()=>setModal(false)}>
+    <Transition showClass={'modal'} hide={!modal} onClick={()=>setModal(false)}>
       <div className="modal__form" onClick={(e)=>e.stopPropagation()}>
         {/* <h3 className="modal__title">{ edit ? words.titlewindowedit[lang] : words.titlewindow[lang] }</h3> */}
-        <h3 className="modal__title">{ edit ? 'Изменить заметку' : 'Добавить заметку' }</h3>
+        <h3 className="modal__title">{ noteInfo ? 'Изменить заметку' : 'Добавить заметку' }</h3>
         <div className="modal__content">
           <label>
             <span>Title</span>
-            <input type="text"/>
+            <input type="text" value={input} onChange={(e)=>{setInput(e.target.value)}}/>
           </label>
           <label>
             <span>Content</span>
-            <textarea></textarea>
+            <textarea value={textarea} onChange={(e)=>{setTextarea(e.target.value)}}></textarea>
           </label>
         </div>
         <div className="modal__controls">
           {/* <button className="modal__btn modal__btn_red" onClick={closeModal}>{ words.closebtn[lang] }</button> */}
-          <button className="modal__btn modal__btn_red" onClick={()=>setModal(false)}>Отмена</button>
+          <button className="modal__btn modal__btn_red" onClick={closeModal}>Отмена</button>
           {/* <button className="modal__btn" onClick={changeNote}>{ words.editwindowbtn[lang] }</button> */}
-          <button className="modal__btn" onClick={changeNote}>Изменить</button>
-          <button className="modal__btn" onClick={addNote}>Добавить</button>
+          {noteInfo ? <button className="modal__btn" onClick={changeHandle}>Изменить</button> :
+          <button className="modal__btn" onClick={addHandle}>Добавить</button>}
         </div>
       </div>
-    </div>
+    </Transition>
   );
 }
 
