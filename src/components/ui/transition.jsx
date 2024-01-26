@@ -2,6 +2,12 @@ import { useEffect, useRef } from "react";
 
 function Transition({showClass, hide, children, onClick}) {
   const elem = useRef(null);
+  useEffect(() => {
+    if(elem && hide) {
+      elem.current.style.display = 'none'
+    } 
+  }, []);
+  
   useEffect(()=>{
     if(elem && hide) {
       elem.current.classList.add(`${showClass}_hide`)
@@ -16,6 +22,7 @@ function Transition({showClass, hide, children, onClick}) {
       }, 100);
     }
   })
+  
   return ( 
     <div ref={elem} className={showClass} onClick={onClick}>
       {children}
