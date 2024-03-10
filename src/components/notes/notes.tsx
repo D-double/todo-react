@@ -1,3 +1,4 @@
+import React from "react";
 import { useState } from "react";
 import NoteItem from "./notes-item";
 import './notes.css'

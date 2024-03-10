@@ -1,3 +1,4 @@
+import React from "react";
 import useNotes from "../../hooks/useNotes";
 
 function NoteItem({ grid, note }) {

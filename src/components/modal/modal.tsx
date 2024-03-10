@@ -1,10 +1,10 @@
 import './modal.css'
 import useNotes from '../../hooks/useNotes';
 import { Transition } from '../ui';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 function Modal() {
-  const {setModal, noteInfo, modal, changeNote, addNote, closeModal, currentId, lang, words} = useNotes();
+  const {noteInfo, modal, changeNote, addNote, closeModal, currentId, lang, words} = useNotes();
   const [input, setInput] = useState('');
   const [textarea, setTextarea] = useState('');
   useEffect(()=>{
@@ -28,14 +28,14 @@ function Modal() {
         date: new Date().toLocaleDateString()
       }
       addNote(item)
-      setModal(false)
+      closeModal()
     }
   }
 
   const changeHandle = ()=>{
     let title = input.trim();
     let desc = textarea.trim()
-    if (title.length > 0 && desc.length > 0) {
+    if (title.length > 0 && desc.length > 0 && noteInfo) {
       let item = {
         id: noteInfo.id,
         title,
@@ -43,13 +43,13 @@ function Modal() {
         date: new Date().toLocaleDateString()
       }
       changeNote(item)
-      setModal(false)
+      closeModal()
     }
   }
 
   return ( 
-    <Transition showClass={'modal'} hide={!modal} onClick={()=>setModal(false)}>
-      <div className="modal__form" onClick={(e)=>e.stopPropagation()}>
+    <Transition showClass={'modal'} hide={!modal} onMouseDown={closeModal}>
+      <div className="modal__form" onMouseDown={(e)=>e.stopPropagation()}>
         <h3 className="modal__title">{ noteInfo ? words.titlewindowedit[lang] : words.titlewindow[lang] }</h3>
         {/* <h3 className="modal__title">{ noteInfo ? 'Изменить заметку' : 'Добавить заметку' }</h3> */}
         <div className="modal__content">

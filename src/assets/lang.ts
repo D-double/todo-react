@@ -1,4 +1,23 @@
-const lang = {
+interface ILangElem {
+    ru: string;
+    uz: string;
+}
+export interface ILang {
+    appbartitle: ILangElem;
+    appbarseacrch: ILangElem;
+    infobar: ILangElem;
+    noinfobar: ILangElem;
+    list: ILangElem;
+    grid: ILangElem;
+    titlewindow: ILangElem;
+    titlewindowedit: ILangElem;
+    editbtn: ILangElem;
+    deledit: ILangElem;
+    closebtn: ILangElem;
+    addbtn: ILangElem;
+    editwindowbtn: ILangElem;
+}
+const lang: ILang = {
     appbartitle: {
         ru: 'Заметки',
         uz: 'Eslatmalar'

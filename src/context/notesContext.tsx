@@ -1,5 +1,5 @@
-import { createContext, useEffect, useState } from "react";
-import words from '../assets/lang'
+import React, { createContext, useEffect, useState } from "react";
+import words, { ILang } from '../assets/lang'
 const list = [
   {
     id: 1,
@@ -20,29 +20,50 @@ const list = [
     date: "07.03.2022",
   },
 ];
-// export const NotesContext = createContext({
-//   notes: [],
-//   modal: false,
-//   edit: false,
-//   editNote: {},
-//   search: '',
-//   currentId: 1,
-//   lang: 'ru',
-//   words
-// });
-export const NotesContext = createContext();
+
+export interface INote {
+  id: number;
+  title: string;
+  desc: string;
+  date: string;
+}
+
+export enum LangType {
+  ru = 'ru',
+  uz = 'uz'
+}
+
+interface INotesContext {
+  notes: INote[];
+  delNote: (id: number)=>void;
+  editNote: (id: number)=>void;
+  modal: boolean;
+  noteInfo: INote | null;
+  changeNote: (item: INote)=>void;
+  addNote: (item: INote)=>void;
+  search: string;
+  setSearch: (search: string)=>void;
+  closeModal: ()=>void;
+  setModal: (val: boolean)=>void;
+  currentId: number;
+  setCurrentId: (id: number)=>void;
+  lang: LangType;
+  setLang: (type: LangType) => void;
+  words: ILang;
+}
+export const NotesContext = createContext<INotesContext | null>(null);
 
 const NotesProvider = ({ children }) => {
-  const [notes, setNotes] = useState(list);
-  const [modal, setModal] = useState(false);
-  const [noteInfo, setNoteInfo] = useState(null);
-  const [search, setSearch] = useState('');
-  const [currentId, setCurrentId] = useState(0);
-  const [lang, setLang] = useState('ru');
+  const [notes, setNotes] = useState<INote[]>(list);
+  const [modal, setModal] = useState<boolean>(false);
+  const [noteInfo, setNoteInfo] = useState<INote | null>(null);
+  const [search, setSearch] = useState<string>('');
+  const [currentId, setCurrentId] = useState<number>(0);
+  const [lang, setLang] = useState<LangType>(LangType.ru);
   
   useEffect(() => {
     let localNotes = localStorage.getItem('notes');
-    localNotes = JSON.parse(localNotes)
+    localNotes = localNotes ? JSON.parse(localNotes) : null;
     if(Array.isArray(localNotes)) {
       setNotes(localNotes);
     } 
@@ -57,21 +78,23 @@ const NotesProvider = ({ children }) => {
 
   
 
-  const addNote = (item) => {
+  const addNote = (item: INote) => {
     setNotes([...notes, item]);
     setCurrentId(item.id)
   };
-  const delNote = (id) => {
+  const delNote = (id: number): void => {
     setNotes(notes.filter((elem) => elem.id != id));
   };
 
-  const editNote = (id) => {
+  const editNote = (id:number ) => {
     let value = notes.find((note) => note.id == id);
-    setModal(true);
-    setNoteInfo(value);
+    if (value) {
+      setModal(true);
+      setNoteInfo(value);      
+    }
   };
 
-  const changeNote = (item) => {
+  const changeNote = (item: INote) => {
     let elems = notes.map((elem) => {
       if (elem.id == item.id) {
         elem.title = item.title;
